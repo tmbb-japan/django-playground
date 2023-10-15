@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.core.management import BaseCommand, CommandError
 from django.core.validators import validate_email
+from django.template.loader import render_to_string
 
 
 class Command(BaseCommand):
@@ -12,8 +13,13 @@ class Command(BaseCommand):
         parser.add_argument("receiver", nargs="+", type=str, help="이메일 수신자 주소")
 
     def handle(self, *args, **options):
-        subject = "장고를 활용한 이메일 발송"
-        content = "메시지 내용입니다."
+        subject = render_to_string("app/hello_email_subject.txt")
+        content = render_to_string(
+            "app/hello_email_content.txt",
+            {
+                "event_name": "django_playground",
+            },
+        )
         sender_email = settings.DEFAULT_FROM_EMAIL
         receiver_email_list: List[str] = options["receiver"]
         try:
