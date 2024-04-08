@@ -13,6 +13,16 @@
 <body>
     <div class="container">
         <h1>장고 플레이그라운드</h1>
+        
+        {% if user.is_authenticated %}
+            <p>
+                logged by {{ user }}
+                <a href="/accounts/logout/">Logout</a>  
+            </p>
+        {% else %}
+            <a href="/accounts/login/">Login</a>    
+        {% endif %}
+
         {% block content %}
         {% endblock %}
         <hr />
